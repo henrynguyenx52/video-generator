@@ -1,0 +1,10 @@
+fastapi==0.119.0
+uvicorn[standard]==0.37.0
+python-multipart==0.0.20
+pillow==11.3.0
+numpy==2.0.2
+imageio==2.37.0
+imageio-ffmpeg==0.6.0
+replicate==1.0.7
+pytest==8.4.2
+httpx==0.28.1

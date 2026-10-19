@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Create short videos from text or images." />
+    <title>Motion Lab — AI Video Studio</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+    <script src="/static/app.js" defer></script>
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="/" aria-label="Motion Lab home">
+        <span class="brand-mark">M</span>
+        <span>Motion Lab</span>
+      </a>
+      <div class="provider"><span class="status-dot"></span><span id="providerLabel">Prompt video</span></div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <p class="eyebrow">AI VIDEO STUDIO</p>
+        <h1>Turn an idea into <span>motion.</span></h1>
+        <p class="subhead">Describe a scene, choose the format, and follow its progress from queue to finished video.</p>
+      </section>
+
+      <section class="workspace">
+        <form id="generatorForm" class="composer">
+          <div class="mode-tabs" role="tablist" aria-label="Generation mode">
+            <button class="mode-tab active" type="button" data-mode="text-to-video">Text to video</button>
+            <button class="mode-tab" type="button" data-mode="image-to-video">Image to video</button>
+          </div>
+          <input id="mode" name="mode" type="hidden" value="text-to-video" />
+
+          <label class="field-label" for="prompt">Describe your video</label>
+          <div class="prompt-shell">
+            <textarea id="prompt" name="prompt" minlength="3" maxlength="1500" required placeholder="A tiny glass greenhouse floating above a misty forest at sunrise, cinematic camera drift..."></textarea>
+            <span class="counter"><span id="promptCount">0</span>/1500</span>
+          </div>
+
+          <div id="imageField" class="upload-field hidden">
+            <label for="image">
+              <span class="upload-icon">↥</span>
+              <strong>Choose a starting image</strong>
+              <small>PNG, JPG, or WebP · up to 10 MB</small>
+            </label>
+            <input id="image" name="image" type="file" accept="image/png,image/jpeg,image/webp" />
+            <div id="imagePreview" class="image-preview hidden"></div>
+          </div>
+
+          <details>
+            <summary>Negative prompt <span>Optional</span></summary>
+            <textarea name="negative_prompt" maxlength="500" placeholder="blur, distortion, flicker, text, watermark"></textarea>
+          </details>
+
+          <div class="settings">
+            <fieldset>
+              <legend>Aspect ratio</legend>
+              <div class="segmented">
+                <label><input type="radio" name="aspect_ratio" value="16:9" checked /><span>▭ &nbsp;16:9</span></label>
+                <label><input type="radio" name="aspect_ratio" value="9:16" /><span>▯ &nbsp;9:16</span></label>
+                <label><input type="radio" name="aspect_ratio" value="1:1" /><span>□ &nbsp;1:1</span></label>
+              </div>
+            </fieldset>
+            <fieldset>
+              <legend>Duration</legend>
+              <div class="segmented">
+                <label><input type="radio" name="duration" value="5" checked /><span>5s</span></label>
+                <label><input type="radio" name="duration" value="10" /><span>10s</span></label>
+              </div>
+            </fieldset>
+            <label class="seed-field">Seed <input name="seed" type="number" min="1" max="2147483647" placeholder="Random" /></label>
+          </div>
+
+          <div id="formError" class="form-error hidden" role="alert"></div>
+          <button id="generateButton" class="generate-button" type="submit">
+            <span class="spark">✦</span>
+            Generate video
+            <span class="cost">1 job</span>
+          </button>
+        </form>
+      </section>
+
+      <section class="creations">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">YOUR WORK</p>
+            <h2>Creations</h2>
+          </div>
+          <button id="refreshButton" class="icon-button" type="button" aria-label="Refresh creations">↻</button>
+        </div>
+        <div id="emptyState" class="empty-state">
+          <div>✦</div>
+          <h3>Your first video starts here</h3>
+          <p>Generated videos will appear in this grid.</p>
+        </div>
+        <div id="creationGrid" class="creation-grid" aria-live="polite"></div>
+      </section>
+    </main>
+
+    <template id="creationTemplate">
+      <article class="creation-card">
+        <div class="media">
+          <video controls loop playsinline></video>
+          <div class="pending">
+            <div class="orb"></div>
+            <div class="pending-status">Queued</div>
+            <div class="progress-track"><span></span></div>
+            <small class="eta"></small>
+          </div>
+          <div class="ratio-pill"></div>
+        </div>
+        <div class="card-body">
+          <p class="card-prompt"></p>
+          <div class="card-meta">
+            <span class="mode-label"></span>
+            <span class="timestamp"></span>
+          </div>
+          <div class="card-actions">
+            <a class="download" download>Download</a>
+            <button class="delete" type="button" aria-label="Delete generation">Delete</button>
+          </div>
+          <p class="card-error hidden"></p>
+        </div>
+      </article>
+    </template>
+  </body>
+</html>
